@@ -4,25 +4,19 @@ require __DIR__ . '/vendor/autoload.php';
 
 class CsvToArray
 {
-    private $fichier;
 
-    public function __construct($fichier)
-    {
-        $this->fichier = $fichier;
-    }
-
-    public function convert()
+    public function convert(string $fichier) : array
     {
         try {
-            $objPHPExcel = \PHPExcel_IOFactory::load($this->fichier);
+            $objPHPExcel = \PHPExcel_IOFactory::load($fichier);
             $feuille = $objPHPExcel->getActiveSheet()->toArray(null, true, true, false);
             return $feuille;
         } catch (PHPExcel_Exception $e) {
-            throw new InvalidArgumentException('Fichier introuvable !');
+            throw new \InvalidArgumentException('Fichier introuvable !');
         }
     }
 
-    public function organnigramme($tableau)
+    public function organnigramme(array $tableau, string $nom) : array
     {
         if (is_array($tableau)) {
             $array = array();
@@ -38,9 +32,9 @@ class CsvToArray
                 }
             }
 
-            return ["Ghada Souguir" =>$array];
+            return [$nom =>$array];
         } else {
-            throw new InvalidArgumentException("Il faut donner un tableau !");
+            throw new \InvalidArgumentException("Il faut donner un tableau !");
         }
     }
 }
